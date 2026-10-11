@@ -34,14 +34,30 @@ This is measured technical evidence, not a competition submission or an award.
 
 ## Publication Gate
 
-Public source, hosted CI/model smoke, GitHub Pages and deployed native-browser
-validation are not yet verified at the time of this initial QA note. Record
-their exact links below after successful publication; never infer deployment
-from a planned URL.
+The initial publication gate is now passed (11 October UTC):
+
+- Public MIT source: https://github.com/darshanahirrao/pocket-soundwalk .
+  Initial73d6a74; workflow-prerequisite fix2f8d45e changes no application code.
+- [Hosted CI38115690227](https://github.com/darshanahirrao/pocket-soundwalk/actions/runs/38115690227)
+  passes tests, audit, real model smoke, build and Pages deployment. The initial
+  run38115609398 correctly stopped on a missing ffmpeg executable; setup now
+  explicitly installs it. No gate was bypassed or test disabled.
+- Hosted CPU/model evidence ranks Bird vocalization at0.3470 and Silence at
+  0.6372 for zero input; measured inference-pair time2.02s. Only smoke evidence,
+  not scientific accuracy or a timing guarantee.
+- Actual published demo: https://darshanahirrao.github.io/pocket-soundwalk/ .
+  Native deployed WASM classification returned Possible birdsong, score0.349,
+  measured5.3s after loading. Real sample/waveform/illustration decoded;
+  no runtime errors/warnings. Public1280/390/320px review shows no page overflow.
+- Local390px text-contrast checks pass68 elements across Listen/Walk/Journal,
+  with no failures. Actual JSON and Markdown downloads both inspected; no audio.
+- Unmodified native deployed captures are in `public/screenshots/`. These are
+  actual app evidence; the separate garden artwork remains illustrative only.
 
 DEV account sign-in terms approval is requested and unanswered. No account or
 competition entry has been created by this run. Final contest publication/rules
 approval will be required at that action. Deadline:12Oct06:59UTC /12:29IST.
+No DEV article/account/competition entry is verified. No award or payment.
 
 ## Remaining Limits
 

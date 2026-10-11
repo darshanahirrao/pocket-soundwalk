@@ -22,3 +22,10 @@ evidence of a real field outing.
 
 The90.8MB q8 AST weight file is fetched from a pinned Hugging Face revision;
 it is not committed. See `public/THIRD_PARTY_NOTICES.txt`.
+
+## Actual App Captures
+
+`public/screenshots/live-inference.png` and `mobile-inference.png` are unmodified
+native screenshots of the published GitHub Pages app on11October2026, with real
+WASM model results. These are separate from the generated garden illustration.
+No field recording/trip, fake interface or human participation is asserted.

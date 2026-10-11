@@ -13,9 +13,10 @@ npm run dev -- --port 8874
 ```
 
 Production: `npm run build` and `npm run preview -- --port 8874`.
-The public static app is intended for GitHub Pages at
-https://darshanahirrao.github.io/pocket-soundwalk/ . Deployment status is recorded
-in `QA.md`; an intended URL alone is not proof of publication.
+The public static app is live at
+https://darshanahirrao.github.io/pocket-soundwalk/ . Hosted CI, real model smoke,
+Pages deployment and actual deployed native-browser inference are verified in
+`QA.md`. Competition publication is still pending; this is not an award.
 
 ## Actual AI, Not a Hardcoded Demo
 
