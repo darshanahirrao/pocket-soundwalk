@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.cache/
+artifacts/
+.DS_Store
+*.f32

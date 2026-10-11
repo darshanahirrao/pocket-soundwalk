@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Pocket Soundwalk: a private, open-source listening journal with on-device sound suggestions."
+    />
+    <meta name="theme-color" content="#235341" />
+    <title>Pocket Soundwalk</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to listening workspace</a>
+    <header class="masthead">
+      <div class="brand">
+        <i data-lucide="audio-lines" aria-hidden="true"></i>
+        <h1>Pocket Soundwalk</h1>
+      </div>
+      <button
+        id="about-button"
+        class="icon-button"
+        aria-label="Model, privacy and credits"
+        title="Model, privacy and credits"
+      >
+        <i data-lucide="info"></i>
+      </button>
+    </header>
+    <nav class="tabs" aria-label="Soundwalk views" role="tablist">
+      <button
+        role="tab"
+        id="listen-tab"
+        aria-controls="listen-panel"
+        aria-selected="true"
+        data-view="listen"
+      >
+        <i data-lucide="headphones"></i>Listen
+      </button>
+      <button
+        role="tab"
+        id="walk-tab"
+        aria-controls="walk-panel"
+        aria-selected="false"
+        tabindex="-1"
+        data-view="walk"
+      >
+        <i data-lucide="footprints"></i>Walk
+      </button>
+      <button
+        role="tab"
+        id="journal-tab"
+        aria-controls="journal-panel"
+        aria-selected="false"
+        tabindex="-1"
+        data-view="journal"
+      >
+        <i data-lucide="notebook-pen"></i>Journal
+        <span id="journal-count">0</span>
+      </button>
+    </nav>
+    <main id="main">
+      <section id="listen-panel" role="tabpanel" aria-labelledby="listen-tab">
+        <div class="listening-grid">
+          <aside class="scene">
+            <img
+              src="./assets/garden-illustration.png"
+              alt="Illustrated birds above a garden path"
+              width="1536"
+              height="1024"
+            />
+            <div class="scene-caption">
+              <span>Field notes / 01</span><span>Illustrative artwork</span>
+            </div>
+            <h2>
+              A small pause.<br />
+              A closer listen.
+            </h2>
+            <p class="quiet-copy">Near. Far. Something changing.</p>
+            <button class="text-button" id="walk-shortcut">
+              Take two minutes outside <i data-lucide="arrow-up-right"></i>
+            </button>
+          </aside>
+          <div class="workspace">
+            <div class="section-heading">
+              <h2>Your sound</h2>
+              <span class="meta">2-10 seconds</span>
+            </div>
+            <div class="source-tools">
+              <button id="record-button" class="secondary-button">
+                <i data-lucide="mic"></i>Record
+              </button>
+              <label class="secondary-button file-label" for="audio-file"
+                ><i data-lucide="upload"></i>Open audio</label
+              >
+              <input
+                id="audio-file"
+                type="file"
+                accept="audio/*,.wav,.mp3,.ogg,.m4a,.webm,.flac,.aac"
+                class="file-input"
+              />
+              <button id="sample-button" class="text-button">
+                <i data-lucide="bird"></i>Garden sample
+              </button>
+            </div>
+            <div class="clip-space">
+              <div class="clip-heading">
+                <strong id="clip-name">No clip selected</strong
+                ><span id="clip-duration" class="meta">--</span>
+              </div>
+              <div
+                id="waveform"
+                class="waveform"
+                aria-label="Audio waveform"
+              ></div>
+              <audio id="audio-player" controls hidden preload="none"></audio>
+              <p id="clip-provenance" class="meta">
+                Audio stays on this device. No location collected.
+              </p>
+            </div>
+            <div class="analyze-row">
+              <button id="analyze-button" class="primary-button" disabled>
+                <i data-lucide="scan-line"></i>Identify sound
+              </button>
+              <button
+                id="cancel-button"
+                class="icon-button"
+                hidden
+                aria-label="Cancel analysis"
+                title="Cancel analysis"
+              >
+                <i data-lucide="x"></i>
+              </button>
+              <span id="model-badge" class="meta">AST / on-device</span>
+            </div>
+            <p id="model-download" class="download-note">
+              First analysis downloads 90.8 MB of model weights, plus runtime
+              files.
+            </p>
+            <div
+              id="model-status"
+              class="status"
+              role="status"
+              aria-live="polite"
+            >
+              Ready when you are.
+            </div>
+            <progress
+              id="model-progress"
+              max="100"
+              value="0"
+              hidden
+              aria-label="Model file download progress"
+            ></progress>
+            <div class="results-section">
+              <div class="section-heading">
+                <h2 id="result-title">Sound suggestions</h2>
+                <span id="inference-time" class="meta"></span>
+              </div>
+              <p id="result-note" class="meta">No result yet.</p>
+              <ol id="results" class="results"></ol>
+            </div>
+            <form id="listen-note" class="note-form">
+              <label for="listen-observation">What did you hear?</label>
+              <textarea
+                id="listen-observation"
+                maxlength="500"
+                rows="2"
+                required
+                placeholder="An observation in your own words"
+              ></textarea>
+              <label class="confirm"
+                ><input id="listen-confirm" type="checkbox" required /> This is
+                my observation, not just the model's guess.</label
+              >
+              <button class="secondary-button" type="submit">
+                <i data-lucide="plus"></i>Save field note
+              </button>
+              <p id="listen-form-status" class="status" role="status"></p>
+            </form>
+          </div>
+        </div>
+      </section>
+      <section
+        id="walk-panel"
+        role="tabpanel"
+        aria-labelledby="walk-tab"
+        hidden
+      >
+        <div class="walk-layout">
+          <div class="interval">
+            <span class="eyebrow">Listening interval</span>
+            <h2>Leave room for the world.</h2>
+            <p class="quiet-copy">
+              Notice something close. Something far. Something changing.
+            </p>
+            <div
+              id="timer"
+              class="timer"
+              role="timer"
+              aria-label="Time remaining"
+            >
+              02:00
+            </div>
+            <div class="timer-tools">
+              <button id="timer-toggle" class="primary-button">
+                <i data-lucide="play"></i><span>Start interval</span>
+              </button>
+              <button
+                id="timer-reset"
+                class="icon-button"
+                aria-label="Reset interval"
+                title="Reset interval"
+              >
+                <i data-lucide="rotate-ccw"></i>
+              </button>
+            </div>
+            <p id="timer-status" class="status" role="status">
+              Two minutes. No screen needed.
+            </p>
+            <p class="meta">
+              Stay somewhere safe; don't record private conversations.
+            </p>
+          </div>
+          <form id="walk-note" class="note-form">
+            <h2>Back from listening</h2>
+            <label for="walk-observation">What did you notice?</label>
+            <textarea
+              id="walk-observation"
+              maxlength="500"
+              rows="5"
+              required
+              placeholder="Something your ears caught"
+            ></textarea>
+            <label for="walk-place"
+              >Place label <span class="meta">(optional)</span></label
+            >
+            <input
+              id="walk-place"
+              type="text"
+              maxlength="80"
+              placeholder="A place name, not an exact address"
+            />
+            <label class="confirm"
+              ><input id="walk-confirm" type="checkbox" required /> This is my
+              own observation.</label
+            >
+            <button class="primary-button" type="submit">
+              <i data-lucide="plus"></i>Save field note
+            </button>
+            <p id="walk-form-status" class="status" role="status"></p>
+          </form>
+        </div>
+      </section>
+      <section
+        id="journal-panel"
+        role="tabpanel"
+        aria-labelledby="journal-tab"
+        hidden
+      >
+        <div class="journal-heading">
+          <h2>Field journal</h2>
+          <div class="export-tools">
+            <label for="export-format">Format</label
+            ><select id="export-format">
+              <option value="json">JSON</option>
+              <option value="markdown">Markdown</option>
+            </select>
+            <button
+              id="export-button"
+              class="icon-button"
+              aria-label="Export journal"
+              title="Export journal"
+            >
+              <i data-lucide="download"></i>
+            </button>
+          </div>
+        </div>
+        <p id="storage-note" class="meta">
+          Notes saved in this browser. Audio is not saved.
+        </p>
+        <div id="journal-entries"></div>
+        <p id="journal-status" class="status" role="status"></p>
+      </section>
+    </main>
+    <footer>
+      <span>Pocket Soundwalk / 2026</span
+      ><a
+        href="https://github.com/darshanahirrao/pocket-soundwalk"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Source <i data-lucide="arrow-up-right"></i
+      ></a>
+    </footer>
+    <dialog id="about-dialog" aria-labelledby="about-title">
+      <div class="dialog-heading">
+        <h2 id="about-title">Model, privacy &amp; credits</h2>
+        <button id="about-close" class="icon-button" aria-label="Close details">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <h3>On-device, not infallible</h3>
+      <p>
+        Audio Spectrogram Transformer (AST), trained on AudioSet's broad sound
+        classes. Quantized open weights run in a browser worker through
+        Transformers.js and ONNX Runtime. Scores are not calibrated
+        probabilities. This is not a species identifier, safety detector or
+        research instrument.
+      </p>
+      <p>
+        Clips are decoded locally. Only the first 10 seconds are analyzed. Very
+        quiet or clipped input is rejected before inference; uncertain results
+        remain uncertain. Notes require your confirmation.
+      </p>
+      <h3>Network &amp; storage</h3>
+      <p>
+        The first analysis downloads public model and runtime files from Hugging
+        Face and its file-delivery hosts. Those hosts and GitHub Pages can see
+        ordinary connection metadata. No audio, note text, account or precise
+        location is sent by this app. No analytics. There is no
+        offline-availability guarantee.
+      </p>
+      <p>
+        Only confirmed note text and optional model scores are saved in this
+        browser. Audio is held temporarily in memory and released when replaced
+        or the page closes. Browser-data clearing removes the journal; export
+        before clearing it.
+      </p>
+      <h3>Credits &amp; limits</h3>
+      <p>
+        <a
+          href="https://huggingface.co/MIT/ast-finetuned-audioset-10-10-0.4593"
+          target="_blank"
+          rel="noopener noreferrer"
+          >AST by Yuan Gong et al.</a
+        >
+        (BSD-3-Clause),
+        <a
+          href="https://huggingface.co/Xenova/ast-finetuned-audioset-10-10-0.4593"
+          target="_blank"
+          rel="noopener noreferrer"
+          >ONNX conversion by Xenova</a
+        >, Transformers.js (Apache-2.0) and Lucide (ISC).
+      </p>
+      <p>
+        <a
+          href="https://commons.wikimedia.org/wiki/File:Birds_singing_in_garden.ogg"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Garden sample by ezwa</a
+        >, public domain; first 10 seconds, mono 16 kHz conversion. It is not
+        our field recording. Garden artwork was generated with native ImageGen
+        and is illustrative, not a field-test photograph.
+      </p>
+      <p>
+        Built with coding-agent assistance. Real sample inference is tested;
+        outdoor and live-microphone field performance is not yet verified.
+      </p>
+      <p>
+        <a
+          href="./THIRD_PARTY_NOTICES.txt"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Full third-party notices</a
+        >
+      </p>
+    </dialog>
+    <dialog id="delete-dialog" aria-labelledby="delete-title">
+      <h2 id="delete-title">Delete this field note?</h2>
+      <p>
+        This removes the note from this browser. Export it first if you need a
+        copy.
+      </p>
+      <div class="dialog-actions">
+        <button id="delete-cancel" class="secondary-button">Keep note</button
+        ><button id="delete-confirm" class="danger-button">Delete note</button>
+      </div>
+    </dialog>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
