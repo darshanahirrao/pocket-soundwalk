@@ -20,6 +20,8 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm audit --audit-level=moderate
+      - run: sudo apt-get update
+      - run: sudo apt-get install --yes ffmpeg
       - run: mkdir -p artifacts
       - run: ffmpeg -hide_banner -loglevel error -i public/assets/garden.wav -f f32le artifacts/garden.f32
       - run: npm run check:model
